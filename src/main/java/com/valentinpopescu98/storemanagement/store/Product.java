@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Product {
 
     @Id
@@ -29,6 +31,24 @@ public class Product {
     // no args constructor to enable JPA for hydrating entities
     public Product() {
         id = null;
+    }
+
+    public Product(Long id, String name, String description, Long price, Long msrp, Long stock) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.msrp = msrp;
+        this.stock = stock;
+    }
+
+    public Product(String name, String description, Long price, Long msrp, Long stock) {
+        id = null;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.msrp = msrp;
+        this.stock = stock;
     }
 
 }
