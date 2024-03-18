@@ -67,8 +67,7 @@ public class ProductService {
             throw new IllegalArgumentException("Product must have a stock number");
         }
 
-        repository.save(product);
-        return product;
+        return repository.save(product);
     }
 
     public Product update(Long id, Product newProduct) {

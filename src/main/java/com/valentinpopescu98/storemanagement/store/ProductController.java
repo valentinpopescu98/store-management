@@ -23,10 +23,10 @@ public class ProductController {
             Product fetchedProduct = service.getOne(id);
             return ResponseEntity
                     .ok(fetchedProduct);
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException ex) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
+                    .body(ex.getMessage());
         }
     }
 
@@ -36,10 +36,10 @@ public class ProductController {
             List<Product> fetchedProducts = service.getAll();
             return ResponseEntity
                     .ok(fetchedProducts);
-        } catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException ex) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
+                    .body(ex.getMessage());
         }
     }
 
@@ -50,10 +50,10 @@ public class ProductController {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(savedProduct);
-        } catch (DataIntegrityViolationException | IllegalArgumentException e) {
+        } catch (DataIntegrityViolationException | IllegalArgumentException ex) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
+                    .body(ex.getMessage());
         }
     }
 
@@ -63,14 +63,14 @@ public class ProductController {
             Product updatedProduct = service.update(id, newProduct);
             return ResponseEntity
                     .ok(updatedProduct);
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException ex) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        } catch (DataIntegrityViolationException | IllegalArgumentException e) {
+                    .body(ex.getMessage());
+        } catch (DataIntegrityViolationException | IllegalArgumentException ex) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
+                    .body(ex.getMessage());
         }
     }
 
@@ -81,10 +81,10 @@ public class ProductController {
             return ResponseEntity
                     .noContent()
                     .build();
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException ex) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
+                    .body(ex.getMessage());
         }
     }
 
