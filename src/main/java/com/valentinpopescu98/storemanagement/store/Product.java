@@ -33,6 +33,15 @@ public class Product {
         id = null;
     }
 
+    public Product(Long id, String name, String description, Long price, Long msrp, Long stock) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.msrp = msrp;
+        this.stock = stock;
+    }
+
     public Product(String name, String description, Long price, Long msrp, Long stock) {
         id = null;
         this.name = name;
