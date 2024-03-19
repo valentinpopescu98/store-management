@@ -16,8 +16,6 @@ class ProductRepositoryTest {
     public static final Product DUMMY_PRODUCT =
             new Product(1L, "dummy-name", "dummy-description", 1L, null, 0L);
 
-    private static final String DUMMY_NAME = "dummy-name";
-
     @Autowired
     private ProductRepository repository;
 
@@ -32,7 +30,7 @@ class ProductRepositoryTest {
         repository.save(DUMMY_PRODUCT_NULL_ID);
 
         // when
-        boolean doesExist = repository.existsByName(DUMMY_NAME);
+        boolean doesExist = repository.existsByName(DUMMY_PRODUCT.getName());
 
         // then
         assertTrue(doesExist);
@@ -41,7 +39,7 @@ class ProductRepositoryTest {
     @Test
     void existsByNameNotFoundTest() {
         // when
-        boolean doesExist = repository.existsByName(DUMMY_NAME);
+        boolean doesExist = repository.existsByName(DUMMY_PRODUCT.getName());
 
         // then
         assertFalse(doesExist);
