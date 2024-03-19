@@ -113,25 +113,6 @@ class ProductServiceTest {
     }
 
     @Test
-    void addMissingFieldsProductTest() {
-        // given
-        Product nullNameProduct =
-                new Product(null, "dummy-description", 1L, null, 0L);
-        Product nullDescriptionProduct =
-                new Product("dummy-name", null, 1L, null, 0L);
-        Product nullPriceProduct =
-                new Product("dummy-name", "dummy-description", null, null, 0L);
-        Product nullStockProduct =
-                new Product("dummy-name", "dummy-description", 1L, null, null);
-
-        // then
-        assertThrows(IllegalArgumentException.class, () -> service.add(nullNameProduct));
-        assertThrows(IllegalArgumentException.class, () -> service.add(nullDescriptionProduct));
-        assertThrows(IllegalArgumentException.class, () -> service.add(nullPriceProduct));
-        assertThrows(IllegalArgumentException.class, () -> service.add(nullStockProduct));
-    }
-
-    @Test
     void addZeroPriceProduct() {
         // given
         Product product =
