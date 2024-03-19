@@ -50,21 +50,9 @@ public class ProductService {
                     String.format("Product with name '%s' already exists.", productName));
         }
 
-        // if the added product has conflicting fields
-        if (productName == null) {
-            throw new IllegalArgumentException("Product must have a name");
-        }
-        if (product.getDescription() == null) {
-            throw new IllegalArgumentException("Product must have a description");
-        }
-        if (product.getPrice() == null) {
-            throw new IllegalArgumentException("Product must have a price value");
-        }
+        // if the added product price is '0'
         if (product.getPrice() == 0) {
             throw new IllegalArgumentException("Product must have a price bigger than '0'");
-        }
-        if (product.getStock() == null) {
-            throw new IllegalArgumentException("Product must have a stock number");
         }
 
         return repository.save(product);

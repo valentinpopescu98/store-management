@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.valentinpopescu98</groupId>
 	<artifactId>store-management</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<name>store-management</name>
 	<description>An API that acts as a store management tool</description>
 	<properties>
@@ -29,6 +29,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
 
 		<dependency>
 			<groupId>com.mysql</groupId>
