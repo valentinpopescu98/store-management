@@ -1,11 +1,13 @@
 package com.valentinpopescu98.storemanagement.store;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +46,17 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody Product product) {
+    public ResponseEntity<?> add(@Valid @RequestBody Product product, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessage = new StringBuilder();
+            bindingResult.getAllErrors().forEach(error ->
+                    errorMessage.append(error.getDefaultMessage()).append(".\n"));
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorMessage.toString());
+        }
+
         try {
             Product savedProduct = service.add(product);
             return ResponseEntity
