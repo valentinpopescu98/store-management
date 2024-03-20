@@ -14,7 +14,7 @@ import static com.valentinpopescu98.storemanagement.user.authorities.Role.*;
 public class UserConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner commandLineRunnerUser(UserRepository repository, PasswordEncoder passwordEncoder) {
         return args -> {
             User user = new User("user", passwordEncoder.encode("123456"),
                     false, true, new Authority(USER));
@@ -25,7 +25,7 @@ public class UserConfig {
             User owner = new User("owner", passwordEncoder.encode("123456"),
                     false, true, new Authority(OWNER));
 
-            userRepository.saveAll(List.of(user, admin, owner));
+            repository.saveAll(List.of(user, admin, owner));
         };
     }
 
