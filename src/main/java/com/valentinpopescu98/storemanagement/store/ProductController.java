@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping("/{productId}")
+    @PreAuthorize("hasAuthority('READ')")
     public ResponseEntity<?> getOne(@PathVariable("productId") Long id) {
         try {
             Product fetchedProduct = service.getOne(id);
@@ -33,6 +35,7 @@ public class ProductController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('READ')")
     public ResponseEntity<?> getAll() {
         try {
             List<Product> fetchedProducts = service.getAll();
@@ -46,6 +49,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('WRITE')")
     public ResponseEntity<?> add(@Valid @RequestBody Product product, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
@@ -70,6 +74,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
+    @PreAuthorize("hasAuthority('WRITE')")
     public ResponseEntity<?> update(@PathVariable("productId") Long id, @RequestBody Product newProduct) {
         try {
             Product updatedProduct = service.update(id, newProduct);
@@ -87,6 +92,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
+    @PreAuthorize("hasAuthority('WRITE')")
     public ResponseEntity<String> remove(@PathVariable("productId") Long id) {
         try {
             service.remove(id);
