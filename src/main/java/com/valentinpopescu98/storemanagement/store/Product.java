@@ -1,26 +1,26 @@
 package com.valentinpopescu98.storemanagement.store;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-@Entity
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Getter
 @Setter
+@AllArgsConstructor
 @EqualsAndHashCode
+@Entity
 public class Product {
 
     @Id
-    @SequenceGenerator(allocationSize = 1, name = "product_sequence", sequenceName = "product_sequence")
-    @GeneratedValue(generator = "product_sequence", strategy = IDENTITY)
+    @SequenceGenerator(allocationSize = 1, name = "product_seq", sequenceName = "product_seq")
+    @GeneratedValue(generator = "product_seq", strategy = IDENTITY)
     private final Long id;
     @NotNull(message = "Product must have a name")
     @NotEmpty(message = "Product name must not be blank")
@@ -39,15 +39,6 @@ public class Product {
     // no args constructor to enable JPA for hydrating entities
     public Product() {
         id = null;
-    }
-
-    public Product(Long id, String name, String description, Long price, Long msrp, Long stock) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.msrp = msrp;
-        this.stock = stock;
     }
 
     public Product(String name, String description, Long price, Long msrp, Long stock) {
