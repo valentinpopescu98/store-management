@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
@@ -112,6 +113,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = "WRITE")
     void addNullAndEmptyNameTest() throws Exception {
         // given
         Product product = new Product(null, "dummy-description", 1L, null, 0L);
@@ -129,6 +131,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = "WRITE")
     void addNullAndEmptyDescriptionTest() throws Exception {
         // given
         Product product = new Product("dummy-name", null, 1L, null, 0L);
@@ -146,6 +149,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = "WRITE")
     void addNullPriceTest() throws Exception {
         // given
         Product product = new Product("dummy-name", "dummy-description",
@@ -163,6 +167,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = "WRITE")
     void addNullStockTest() throws Exception {
         // given
         Product product = new Product("dummy-name", "dummy-description",
