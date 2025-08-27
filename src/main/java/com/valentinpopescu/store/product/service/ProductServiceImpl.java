@@ -2,6 +2,9 @@ package com.valentinpopescu.store.product.service;
 
 import com.valentinpopescu.store.exceptions.BadRequestException;
 import com.valentinpopescu.store.exceptions.NotFoundException;
+import com.valentinpopescu.store.product.dto.PriceChangeRequest;
+import com.valentinpopescu.store.product.dto.ProductCreateRequest;
+import com.valentinpopescu.store.product.dto.ProductResponse;
 import com.valentinpopescu.store.product.model.Product;
 import com.valentinpopescu.store.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -9,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -24,36 +26,41 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository repository;
 
     @Override
-    public Product add(Product product) {
-        if (repository.existsByProductCode(product.getProductCode())) {
+    public ProductResponse add(ProductCreateRequest request) {
+        if (repository.existsByProductCode(request.productCode())) {
             throw new BadRequestException("Product already exists");
         }
 
+        Product product = new Product(request.productCode(), request.name(), request.price());
         Product savedProduct = repository.save(product);
         log.info("Product created: product code={}", savedProduct.getProductCode());
 
-        return savedProduct;
+        return map(savedProduct);
     }
 
     @Override
-    public Product findByProductCode(String productCode) {
-        return repository.findByProductCode(productCode)
+    public ProductResponse findByProductCode(String productCode) {
+        Product product = repository.findByProductCode(productCode)
                 .orElseThrow(PRODUCT_NOT_FOUND);
+        return map(product);
     }
 
     @Override
-    public List<Product> findAll() {
-        return repository.findAll();
+    public List<ProductResponse> findAll() {
+        return repository.findAll()
+                .stream()
+                .map(this::map)
+                .toList();
     }
 
     @Override
-    public Product changePrice(String productCode, BigDecimal price) {
+    public ProductResponse changePrice(String productCode, PriceChangeRequest request) {
         Product product = repository.findByProductCode(productCode)
                 .orElseThrow(PRODUCT_NOT_FOUND);
 
-        product.setPrice(price);
-        log.info("Price changed: product code={}, new price={}", productCode, price);
-        return product;
+        product.setPrice(request.price());
+        log.info("Price changed: product code={}, new price={}", productCode, request.price());
+        return map(product);
     }
 
     @Override
@@ -63,5 +70,14 @@ public class ProductServiceImpl implements ProductService {
 
         repository.delete(product);
         log.warn("Product deleted: product code={}", productCode);
+    }
+
+    private ProductResponse map(Product product) {
+        return new ProductResponse(
+                product.getId(),
+                product.getProductCode(),
+                product.getName(),
+                product.getPrice()
+        );
     }
 }

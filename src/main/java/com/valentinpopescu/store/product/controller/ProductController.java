@@ -1,16 +1,16 @@
 package com.valentinpopescu.store.product.controller;
 
-import com.valentinpopescu.store.product.model.Product;
+import com.valentinpopescu.store.product.dto.PriceChangeRequest;
+import com.valentinpopescu.store.product.dto.ProductCreateRequest;
+import com.valentinpopescu.store.product.dto.ProductResponse;
 import com.valentinpopescu.store.product.service.ProductService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -23,25 +23,25 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product add(@RequestBody @Valid Product product) {
-        return service.add(product);
+    public ProductResponse add(@RequestBody @Valid ProductCreateRequest request) {
+        return service.add(request);
     }
 
     @GetMapping("/{productCode}")
-    public Product find(@PathVariable @NotBlank String productCode) {
+    public ProductResponse find(@PathVariable @NotBlank String productCode) {
         return service.findByProductCode(productCode);
     }
 
     @GetMapping
-    public List<Product> findAll() {
+    public List<ProductResponse> findAll() {
         return service.findAll();
     }
 
     @PatchMapping("/{productCode}/price")
-    public Product changePrice(
+    public ProductResponse changePrice(
             @PathVariable @NotBlank String productCode,
-            @RequestParam @DecimalMin(value = "0.01") BigDecimal price) {
-        return service.changePrice(productCode, price);
+            @RequestBody @Valid PriceChangeRequest request) {
+        return service.changePrice(productCode, request);
     }
 
     @DeleteMapping("/{productCode}")
