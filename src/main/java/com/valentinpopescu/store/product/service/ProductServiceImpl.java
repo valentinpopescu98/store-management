@@ -1,12 +1,12 @@
 package com.valentinpopescu.store.product.service;
 
+import com.valentinpopescu.store.exceptions.BadRequestException;
+import com.valentinpopescu.store.exceptions.NotFoundException;
 import com.valentinpopescu.store.product.model.Product;
 import com.valentinpopescu.store.product.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,12 +19,12 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    public static final Supplier<EntityNotFoundException> PRODUCT_NOT_FOUND =
-            () -> new EntityNotFoundException("Product not found");
+    public static final Supplier<NotFoundException> PRODUCT_NOT_FOUND =
+            () -> new NotFoundException("Product not found");
     private final ProductRepository repository;
 
     @Override
-    public Product add(Product product) throws BadRequestException {
+    public Product add(Product product) {
         if (repository.existsByProductCode(product.getProductCode())) {
             throw new BadRequestException("Product already exists");
         }
