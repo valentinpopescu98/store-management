@@ -3,6 +3,8 @@ package com.valentinpopescu.store.exceptions;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -46,5 +48,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiException handleGeneric(Exception ex, HttpServletRequest req) {
         return ApiException.of(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error", req.getRequestURI());
+    }
+
+    @ExceptionHandler({ AuthorizationDeniedException.class, AccessDeniedException.class })
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiException handleAccessDenied(Exception ex, HttpServletRequest req) {
+        return ApiException.of(HttpStatus.FORBIDDEN, "Access denied", req.getRequestURI());
     }
 }
