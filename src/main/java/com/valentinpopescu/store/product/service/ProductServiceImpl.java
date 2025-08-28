@@ -2,6 +2,7 @@ package com.valentinpopescu.store.product.service;
 
 import com.valentinpopescu.store.exceptions.BadRequestException;
 import com.valentinpopescu.store.exceptions.NotFoundException;
+import com.valentinpopescu.store.product.common.ProductSamples;
 import com.valentinpopescu.store.product.dto.PriceChangeRequest;
 import com.valentinpopescu.store.product.dto.ProductCreateRequest;
 import com.valentinpopescu.store.product.dto.ProductResponse;
@@ -31,25 +32,26 @@ public class ProductServiceImpl implements ProductService {
             throw new BadRequestException("Product already exists");
         }
 
-        Product product = new Product(request.productCode(), request.name(), request.price());
+
+        Product product = ProductSamples.requestToProduct(request);
         Product savedProduct = repository.save(product);
         log.info("Product created: product code={}", savedProduct.getProductCode());
 
-        return map(savedProduct);
+        return ProductSamples.productToResponse(savedProduct);
     }
 
     @Override
     public ProductResponse findByProductCode(String productCode) {
         Product product = repository.findByProductCode(productCode)
                 .orElseThrow(PRODUCT_NOT_FOUND);
-        return map(product);
+        return ProductSamples.productToResponse(product);
     }
 
     @Override
     public List<ProductResponse> findAll() {
         return repository.findAll()
                 .stream()
-                .map(this::map)
+                .map(ProductSamples::productToResponse)
                 .toList();
     }
 
@@ -60,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
 
         product.setPrice(request.price());
         log.info("Price changed: product code={}, new price={}", productCode, request.price());
-        return map(product);
+        return ProductSamples.productToResponse(product);
     }
 
     @Override
@@ -70,14 +72,5 @@ public class ProductServiceImpl implements ProductService {
 
         repository.delete(product);
         log.warn("Product deleted: product code={}", productCode);
-    }
-
-    private ProductResponse map(Product product) {
-        return new ProductResponse(
-                product.getId(),
-                product.getProductCode(),
-                product.getName(),
-                product.getPrice()
-        );
     }
 }
